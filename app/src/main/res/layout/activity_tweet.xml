@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:background="@drawable/border"
+    tools:context="com.codepath.apps.simpletweets.activities.TweetActivity">
+
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_twitter"
+        android:layout_margin="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+         />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="name"
+        android:textColor="@android:color/black"
+        android:layout_alignTop="@+id/ivImage"
+        android:layout_toEndOf="@+id/ivImage" />
+
+    <TextView
+        android:id="@+id/tvScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="handle"
+        android:layout_below="@+id/tvName"
+        android:layout_toEndOf="@+id/ivImage" />
+
+    <com.codepath.apps.simpletweets.helper.LinkifiedTextView
+        android:id="@+id/tvBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="all"
+        android:linksClickable="true"
+        tools:text="tweet"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/ivImage"
+        android:layout_marginStart="5dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_below="@+id/tvBody"
+
+        android:id="@+id/linearLayout">
+
+        <ImageButton
+            android:id="@+id/ibReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_reply" />
+
+        <ImageButton
+            android:id="@+id/ibRepeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_repeat" />
+
+        <ImageButton
+            android:id="@+id/ibStar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_star" />
+
+    </LinearLayout>
+
+
+
+
+
+
+</RelativeLayout>
