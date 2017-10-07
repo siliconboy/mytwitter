@@ -35,10 +35,11 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         client = TwitterApp.getRestClient();
       //  mPage = getArguments().getInt(ARG_PAGE);
+        populateTimeline(1L, Long.MAX_VALUE - 1);
     }
 
 @Override
-    public void populateTimeline(Long sinceId, Long maxId, String screenName) {
+    public void populateTimeline(Long sinceId, Long maxId) {
 
         client.getMentionsTimeline(sinceId, maxId, new JsonHttpResponseHandler() {
             @Override

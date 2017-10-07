@@ -1,6 +1,7 @@
 package com.codepath.apps.simpletweets.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,10 +12,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.apps.simpletweets.R;
-import com.codepath.apps.simpletweets.models.Tweet;
-import com.codepath.apps.simpletweets.models.User;
+import com.codepath.apps.simpletweets.activities.ProfileActivity;
 import com.codepath.apps.simpletweets.helper.GlideApp;
 import com.codepath.apps.simpletweets.helper.MyUtils;
+import com.codepath.apps.simpletweets.models.Tweet;
+import com.codepath.apps.simpletweets.models.User;
 
 import java.util.List;
 
@@ -87,6 +89,15 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(v.getContext(), ProfileActivity.class);
+                    String sName = tvHandle.getText().toString().substring(1);
+                    i.putExtra("screen_name", sName);
+                    v.getContext().startActivity(i);
+                }
+            });
         }
     }
 

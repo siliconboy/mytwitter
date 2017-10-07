@@ -36,14 +36,6 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 import static com.codepath.apps.simpletweets.models.Tweet.fromJson;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TweetsListFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TweetsListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TweetsListFragment extends Fragment {
 
     TweetAdapter adapter;
@@ -80,7 +72,7 @@ public class TweetsListFragment extends Fragment {
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
                 Log.d("DEBUG", "swipe refresh called");
-                populateTimeline(1L,Long.MAX_VALUE - 1, screenName);
+                populateTimeline(1L,Long.MAX_VALUE - 1);
             }
         });
 
@@ -138,7 +130,7 @@ public class TweetsListFragment extends Fragment {
           if (hasLocal && NetworkUtils.isOnline()) {
               adapter.clear();
               hasLocal=false;
-              populateTimeline(1L, Long.MAX_VALUE - 1,screenName);
+              populateTimeline(1L, Long.MAX_VALUE - 1);
           }
 
         return v;
@@ -164,9 +156,9 @@ public class TweetsListFragment extends Fragment {
                if(hasLocal) {
                    adapter.clear();
                    hasLocal =false;
-                   populateTimeline(1L,Long.MAX_VALUE - 1,"");
+                   populateTimeline(1L,Long.MAX_VALUE - 1);
                 }else {
-                   populateTimeline(1L, tweets.get(curSize - 1).getId(),screenName);
+                   populateTimeline(1L, tweets.get(curSize - 1).getId());
                }
         };
         // Run the above code block on the main thread after 500 miliseconds
@@ -184,7 +176,7 @@ public class TweetsListFragment extends Fragment {
         rvTweets.scrollToPosition(0);
     }
 
-    public void  populateTimeline(Long sinceId, Long maxId, String screenName){}
+    public void  populateTimeline(Long sinceId, Long maxId){}
 
 
     // When binding a fragment in onCreateView, set the views to null in onDestroyView.

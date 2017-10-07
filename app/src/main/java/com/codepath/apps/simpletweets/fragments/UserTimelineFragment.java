@@ -2,12 +2,8 @@ package com.codepath.apps.simpletweets.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.codepath.apps.simpletweets.R;
 import com.codepath.apps.simpletweets.TwitterApp;
 import com.codepath.apps.simpletweets.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -15,7 +11,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 
@@ -39,28 +34,14 @@ public class UserTimelineFragment extends TweetsListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApp.getRestClient();
-        screenName = getArguments().getString("screen_name");
-
+     //   screenName = getArguments().getString("screen_name");
+        populateTimeline(1L,1L);
     }
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_usertimeline, container, false);
-        unbinder = ButterKnife.bind(this,v);
-
-
-        return v;
-    }
-    // When binding a fragment in onCreateView, set the views to null in onDestroyView.
-    // ButterKnife returns an Unbinder on the initial binding that has an unbind method to do this automatically.
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @Override
-    public void populateTimeline(Long sinceId, Long maxId,String screenName) {
-
+    public void populateTimeline(Long sinceId, Long maxId) {
+        String screenName = getArguments().getString("screen_name");
         client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
