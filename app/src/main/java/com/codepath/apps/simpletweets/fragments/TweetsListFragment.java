@@ -36,7 +36,7 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 import static com.codepath.apps.simpletweets.models.Tweet.fromJson;
 
-public class TweetsListFragment extends Fragment {
+public abstract class TweetsListFragment extends Fragment {
 
     TweetAdapter adapter;
     ArrayList<Tweet> tweets;
@@ -172,11 +172,11 @@ public class TweetsListFragment extends Fragment {
 
     public void addItem(JSONObject response){
         tweets.add(0, fromJson(response));
-        adapter.notifyItemInserted(tweets.size() - 1);
+        adapter.notifyDataSetChanged();  //notifyItemInserted(tweets.size() - 1);
         rvTweets.scrollToPosition(0);
     }
 
-    public void  populateTimeline(Long sinceId, Long maxId){}
+    protected abstract void  populateTimeline(Long sinceId, Long maxId);
 
 
     // When binding a fragment in onCreateView, set the views to null in onDestroyView.

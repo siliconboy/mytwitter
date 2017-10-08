@@ -55,6 +55,18 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvHandle.setText("@" + usr.getScreenName());
         holder.tvTimeGap.setText(MyUtils.getRelativeTimeAgo(tweet.getTimestamp()));
         GlideApp.with(context).load(usr.getProfileImageUrl()).override(150, 150).fitCenter().apply(RequestOptions.circleCropTransform()).into(holder.ivProfileImage);
+
+        if(tweet.getMediaUrl()!=null && tweet.getMediaUrl().length()>0){
+            GlideApp.with(context).load(tweet.getMediaUrl()).override(500,500).fitCenter().into(holder.ivMedia);
+        }else{
+            holder.ivMedia.setVisibility(View.GONE);
+        }
+        if(tweet.getFavoriteCount()>0){
+            holder.tvFavorite.setText(String.valueOf(tweet.getFavoriteCount()));
+        }
+        if(tweet.getRetweetCount()>0){
+            holder.tvRetweet.setText(String.valueOf(tweet.getRetweetCount()));
+        }
     }
 
     // Clean all elements of the recycler
@@ -85,6 +97,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         TextView tvTimeGap;
         @BindView(R.id.tvHandle)
         TextView tvHandle;
+        @BindView(R.id.ivMedia)
+        ImageView ivMedia;
+        @BindView(R.id.tvReply)
+        TextView tvReply;
+        @BindView(R.id.tvRepeat)
+        TextView tvRetweet;
+        @BindView(R.id.tvFavorite)
+        TextView tvFavorite;
 
         public ViewHolder(View itemView) {
             super(itemView);

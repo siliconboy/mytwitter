@@ -10,12 +10,13 @@
     <color name="my_color">#1da1f2</color>
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
-        <item name="android:colorPrimary">@color/my_color</item>
+        <item name="colorPrimary">@color/my_color</item>
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/my_color</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

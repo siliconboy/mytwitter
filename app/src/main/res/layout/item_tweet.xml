@@ -51,5 +51,42 @@
         android:layout_toEndOf="@+id/tvUserName"
         tools:text="handle" />
 
+    <ImageView
+        android:id="@+id/ivMedia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_launcher"
+        android:layout_toEndOf="@+id/ivProfileImage"
+
+        android:layout_below="@+id/tvBody"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivMedia"
+        android:orientation="horizontal"
+        android:layout_toEndOf="@+id/ivProfileImage">
+        <TextView
+            android:id="@+id/tvReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_reply"
+            android:layout_weight="1"
+            tools:text="reply"/>
+        <TextView
+            android:id="@+id/tvRepeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_repeat"
+            android:layout_weight="1"
+            tools:text="retweet"/>
+        <TextView
+            android:id="@+id/tvFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_star"
+            android:layout_weight="1"
+            tools:text="favorite"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

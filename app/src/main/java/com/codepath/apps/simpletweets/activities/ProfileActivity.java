@@ -109,7 +109,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     mUser = User.fromJSON(response);
-                    getSupportActionBar().setTitle(mUser.getScreenName());
+                    getSupportActionBar().setTitle("@" + mUser.getScreenName());
                     //populate user header
                     populateUserHeadline(mUser);
 

@@ -8,6 +8,8 @@ import com.github.scribejava.core.builder.api.BaseApi;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import static com.codepath.apps.simpletweets.models.User_Table.screenName;
+
 /*
  * 
  * This is the object responsible for communicating with a REST API. 
@@ -87,6 +89,14 @@ public class TwitterClient extends OAuthBaseClient {
         client.get(apiUrl, params, handler);
     }
 
+    public void searchTweet(String query, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("search/tweets.json");
+        // Can specify query string params directly or through RequestParams.
+        RequestParams params = new RequestParams();
+        params.put("q", query);
+
+        client.get(apiUrl, params, handler);
+    }
     /* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
      * 	  i.e getApiUrl("statuses/home_timeline.json");
      * 2. Define the parameters to pass to the request (query or body)

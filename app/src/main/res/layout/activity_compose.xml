@@ -9,7 +9,7 @@
         android:id="@+id/btnClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_cancel"
+        app:srcCompat="@drawable/ic_clear"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="5dp"
         android:background="@android:color/transparent"
@@ -65,13 +65,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:background="@color/my_color"
+
         android:text="@string/tweet" />
 
     <TextView
         android:id="@+id/tvCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="13dp"
+        android:layout_marginRight="10dp"
         tools:text="140"
         android:layout_alignBottom="@+id/btnTweet"
         android:layout_toStartOf="@+id/btnTweet" />

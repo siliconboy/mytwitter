@@ -15,31 +15,32 @@ import com.codepath.apps.simpletweets.R;
 import com.codepath.apps.simpletweets.TwitterApp;
 import com.codepath.apps.simpletweets.TwitterClient;
 import com.codepath.apps.simpletweets.adapters.EndlessRecyclerViewScrollListener;
+import com.codepath.apps.simpletweets.adapters.SmartFragmentStatePagerAdapter;
 import com.codepath.apps.simpletweets.adapters.TweetsPagerAdapter;
-import com.codepath.apps.simpletweets.fragments.TweetsListFragment;
-import com.codepath.apps.simpletweets.models.Tweet;
+import com.codepath.apps.simpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.simpletweets.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
-import static com.codepath.apps.simpletweets.models.Tweet.fromJson;
-
 
 public class TimelineActivity extends AppCompatActivity {
-
+    public static String POSITION = "POSITION";
     private final int REQUEST_CODE = 10;  //for compose tweet
     private TwitterClient client;
-    TweetsListFragment tweetsListFragment;
+    //TweetsListFragment tweetsListFragment;
+    private SmartFragmentStatePagerAdapter adapterViewPager;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.sliding_tabs) TabLayout tabLayout;
+    @BindView(R.id.viewpager) ViewPager viewPager;
 
     User mUser;
     Long mMaxId;
@@ -54,8 +55,9 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timeline);
         ButterKnife.bind(this);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(),this));
+        //ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        adapterViewPager = new TweetsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapterViewPager);// TweetsPagerAdapter(getSupportFragmentManager());
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
@@ -100,7 +102,7 @@ public class TimelineActivity extends AppCompatActivity {
 //            tweetFragment.show(fm, "fragment_tweet");
             //activity
             Intent i = new Intent(this, ComposeActivity.class);
-        //    i.putExtra("user", Parcels.wrap(mUser)); // pass user data to launched activity
+            i.putExtra("user", Parcels.wrap(mUser)); // pass user data to launched activity
             startActivityForResult(i, REQUEST_CODE);
         }
 
@@ -111,6 +113,18 @@ public class TimelineActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(POSITION, tabLayout.getSelectedTabPosition());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        viewPager.setCurrentItem(savedInstanceState.getInt(POSITION));
     }
 
     @Override
@@ -134,18 +148,15 @@ public class TimelineActivity extends AppCompatActivity {
         client.postTweet(msg, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Tweet tweet = fromJson(response);
+                //Tweet tweet = fromJson(response);
 
-    //            tweetsListFragment.addItem(response);
+                HomeTimelineFragment homeTimelineFragment= (HomeTimelineFragment) adapterViewPager.getRegisteredFragment(0);
+                homeTimelineFragment.addItem(response);
+                viewPager.setCurrentItem(0);
+                // tweetsListFragment.addItem(response);
               //  adapter.notifyItemInserted(tweets.size() - 1);
               //  rvTweets.scrollToPosition(0);
                // Log.d("Twitter.return", tweet.toString());
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-
-                Log.d("Twitter.client", response.toString());
             }
 
             @Override
@@ -155,19 +166,6 @@ public class TimelineActivity extends AppCompatActivity {
                 throwable.printStackTrace();
             }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Toast.makeText(TimelineActivity.this, "not able to post your tweet.", Toast.LENGTH_LONG).show();
-                Log.d("Twitter.client", errorResponse.toString());
-                throwable.printStackTrace();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(TimelineActivity.this, "not able to post your tweet.", Toast.LENGTH_LONG).show();
-                Log.d("Twitter.client", responseString);
-                throwable.printStackTrace();
-            }
         });
 
     }

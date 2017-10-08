@@ -34,7 +34,16 @@ public class Tweet extends BaseModel {
     String timestamp;
     @Column
     String body;
-
+    @Column
+    int favoriteCount;
+    @Column
+    int retweetCount;
+    @Column
+    int replyCount;
+    @Column
+    String mediaUrl;
+    @Column
+    String mediaType;
 
 
     public Long getId() {
@@ -65,6 +74,46 @@ public class Tweet extends BaseModel {
         this.body = body;
     }
 
+    public int getFavoriteCount() {
+        return favoriteCount;
+    }
+
+    public void setFavoriteCount(int favoriteCount) {
+        this.favoriteCount = favoriteCount;
+    }
+
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public int getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(int replyCount) {
+        this.replyCount = replyCount;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
+    }
+
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
+
     public Tweet() {
     }
 
@@ -79,9 +128,27 @@ public class Tweet extends BaseModel {
                 User user = User.fromJSON(object.getJSONObject("user"));
                 user.save();
             }
-
+            this.retweetCount = object.getInt("retweet_count");
+            this.favoriteCount = object.getInt("favorite_count");
             this.timestamp = object.getString("created_at");
             this.body = object.getString("text");
+            JSONArray array=null;
+            try {
+                JSONObject  jObj= object.getJSONObject("extended_entities");
+                 array = jObj.getJSONArray("media");
+                if ( array!= null && array.length()>0) {
+                    this.mediaUrl = array.getJSONObject(0).getString("media_url");
+                    this.mediaType = array.getJSONObject(0).getString("type");
+                }
+            }catch (JSONException e) {
+                    this.mediaType="";
+                    this.mediaUrl="";
+            }
+            try {
+                this.replyCount = object.getInt("reply_count");
+            } catch (JSONException e) {
+                //skip
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -112,6 +179,33 @@ public class Tweet extends BaseModel {
         tweet.save();
         return tweet;
     }
+
+    public static ArrayList<Tweet> fromSearch(JSONObject jsonObject) {
+        JSONArray array = null;
+        try {
+            array = jsonObject.getJSONArray("statuses");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ArrayList<Tweet> tweets = new ArrayList<Tweet>(array.length());
+
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject tweetJson = null;
+            try {
+                tweetJson = array.getJSONObject(i);
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+
+            Tweet tweet = new Tweet(tweetJson);
+            tweet.save();
+            tweets.add(tweet);
+        }
+
+        return tweets;
+    }
+
 
     // Record Finders
     public static Tweet byId(long id) {
