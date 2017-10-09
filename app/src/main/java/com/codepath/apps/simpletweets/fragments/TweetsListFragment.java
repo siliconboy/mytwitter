@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.codepath.apps.simpletweets.R;
 import com.codepath.apps.simpletweets.activities.TweetActivity;
@@ -86,14 +87,14 @@ public abstract class TweetsListFragment extends Fragment {
         adapter = new TweetAdapter(tweets);
         rvTweets.setAdapter(adapter);
 
-/*        if (NetworkUtils.isNetworkAvailable(getContext()) || NetworkUtils.isOnline()) {
+        if (!NetworkUtils.isNetworkAvailable(getContext()) || !NetworkUtils.isOnline()) {
             Toast.makeText(getActivity(), "offline mode. Loading local data.", Toast.LENGTH_LONG).show();
             //     Snackbar.make(searchLayout, R.string.net_error, Snackbar.LENGTH_LONG).show();
             adapter.addAll(Tweet.recentItems());
             hasLocal = true;
             Log.d("DEBUG", "local load count:" + tweets.size());
         }
-*/
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTweets.setLayoutManager(linearLayoutManager);
         // Retain an instance so that you can call `resetState()` for fresh searches
@@ -129,6 +130,7 @@ public abstract class TweetsListFragment extends Fragment {
 
           if (hasLocal && NetworkUtils.isOnline()) {
               adapter.clear();
+              isDone =false;
               hasLocal=false;
               populateTimeline(1L, 0L);//Long.MAX_VALUE - 1);
           }
