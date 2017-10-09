@@ -40,12 +40,13 @@ public class MentionsTimelineFragment extends TweetsListFragment {
 
 @Override
     public void populateTimeline(Long sinceId, Long maxId) {
-
+        //pd.show();
         client.getMentionsTimeline(sinceId, maxId, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 addItems(response);
+               // pd.dismiss();
                 // for swipe
                 Log.d("DEBUG", "swipt disable");
                 swipeContainer.setRefreshing(false);

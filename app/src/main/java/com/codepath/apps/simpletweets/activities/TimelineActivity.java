@@ -3,18 +3,20 @@ package com.codepath.apps.simpletweets.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.codepath.apps.simpletweets.R;
 import com.codepath.apps.simpletweets.TwitterApp;
 import com.codepath.apps.simpletweets.TwitterClient;
-import com.codepath.apps.simpletweets.adapters.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.simpletweets.adapters.SmartFragmentStatePagerAdapter;
 import com.codepath.apps.simpletweets.adapters.TweetsPagerAdapter;
 import com.codepath.apps.simpletweets.fragments.HomeTimelineFragment;
@@ -36,6 +38,7 @@ public class TimelineActivity extends AppCompatActivity {
     private TwitterClient client;
     //TweetsListFragment tweetsListFragment;
     private SmartFragmentStatePagerAdapter adapterViewPager;
+    MenuItem miActionProgressItem;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -47,7 +50,7 @@ public class TimelineActivity extends AppCompatActivity {
     Long mSinceId;
     //boolean hasLocal =false;
 
-    private EndlessRecyclerViewScrollListener scrollListener;
+    //private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +80,45 @@ public class TimelineActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         getCredential();
+
     }
 
+  //  @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
 
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                // perform query here
+
+                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
+                // see https://code.google.com/p/android/issues/detail?id=24599
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
         return true;
     }
 
@@ -136,7 +170,7 @@ public class TimelineActivity extends AppCompatActivity {
             // Extract name value from result extras
             String message = data.getExtras().getString("message");
             // Toast the name to display temporarily on screen
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             //do post for tweet.
             onFinishDialog(message);
         }
@@ -179,7 +213,7 @@ public class TimelineActivity extends AppCompatActivity {
                   //  getSupportActionBar().setTitle(mUser.getScreenName());
                     //populate user header
                  //   populateUserHeadline(mUser);
-
+    hideProgressBar();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -196,4 +230,13 @@ public class TimelineActivity extends AppCompatActivity {
         });
     }
 
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
+    }
 }

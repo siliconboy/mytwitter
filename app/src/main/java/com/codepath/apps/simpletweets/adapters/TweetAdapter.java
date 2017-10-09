@@ -2,6 +2,7 @@ package com.codepath.apps.simpletweets.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.apps.simpletweets.R;
@@ -16,10 +18,12 @@ import com.codepath.apps.simpletweets.activities.ComposeActivity;
 import com.codepath.apps.simpletweets.activities.ProfileActivity;
 import com.codepath.apps.simpletweets.helper.GlideApp;
 import com.codepath.apps.simpletweets.helper.MyUtils;
+import com.codepath.apps.simpletweets.helper.PatternEditableBuilder;
 import com.codepath.apps.simpletweets.models.Tweet;
 import com.codepath.apps.simpletweets.models.User;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +55,25 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         Tweet tweet = mTweets.get(position);
         Log.d("DEBUG", "adapter bind holder tweet id :" + tweet.getId());
         holder.tvBody.setText(tweet.getBody());
+        // Style clickable spans based on pattern
+
+        new PatternEditableBuilder().
+                addPattern(Pattern.compile("\\@(\\w+)"), Color.BLUE,
+                        new PatternEditableBuilder.SpannableClickedListener() {
+                            @Override
+                            public void onSpanClicked(String text) {
+                                Toast.makeText(context, "Clicked username: " + text,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }).addPattern(Pattern.compile("\\#(\\w+)"), Color.CYAN,
+                            new PatternEditableBuilder.SpannableClickedListener() {
+                               @Override
+                              public void onSpanClicked(String text) {
+                                  Toast.makeText(context, "Clicked hashtag: " + text,
+                                     Toast.LENGTH_SHORT).show();
+                    }
+                }).into(holder.tvBody);
+
         User usr = User.byId(tweet.getUserId());
         holder.tvUserName.setText(usr.getName());
         holder.tvHandle.setText("@" + usr.getScreenName());

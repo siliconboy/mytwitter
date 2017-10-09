@@ -41,12 +41,16 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
     @Override
     public void populateTimeline(Long sinceId, Long maxId) {
+     //   pd.show();
+      //  ((TimelineActivity)getActivity()).showProgressBar();
 
         client.getHomeTimeline(sinceId, maxId, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 addItems(response);
+                //pd.dismiss();
+            //    ((TimelineActivity)getActivity()).hideProgressBar();
                 // for swipe
                 Log.d("DEBUG", "swipt disable");
                 swipeContainer.setRefreshing(false);

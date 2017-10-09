@@ -35,18 +35,20 @@ public class UserTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         client = TwitterApp.getRestClient();
      //   screenName = getArguments().getString("screen_name");
-        populateTimeline(1L,Long.MAX_VALUE - 1);
+        populateTimeline(1L,0L); //Long.MAX_VALUE - 1);
     }
 
 
     @Override
     public void populateTimeline(Long sinceId, Long maxId) {
         String screenName = getArguments().getString("screen_name");
+       // pd.show();
         client.getUserTimeline(maxId, screenName, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 addItems(response);
+               // pd.dismiss();
                 // for swipe
                 Log.d("DEBUG", "swipt disable");
                 swipeContainer.setRefreshing(false);

@@ -62,7 +62,6 @@ public abstract class TweetsListFragment extends Fragment {
         View v =inflater.inflate(R.layout.fragment_tweets_list, container, false);
         unbinder= ButterKnife.bind(this, v);
 
-
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
