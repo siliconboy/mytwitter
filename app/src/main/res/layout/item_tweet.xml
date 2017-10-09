@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:scaleType="fitXY"
         app:srcCompat="@drawable/ic_launcher"
         tools:ignore="ContentDescription" />
 
@@ -57,7 +58,7 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_launcher"
         android:layout_toEndOf="@+id/ivProfileImage"
-
+        android:scaleType="fitXY"
         android:layout_below="@+id/tvBody"/>
     <LinearLayout
         android:layout_width="match_parent"

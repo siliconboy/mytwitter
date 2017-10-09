@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.apps.simpletweets.R;
+import com.codepath.apps.simpletweets.activities.ComposeActivity;
 import com.codepath.apps.simpletweets.activities.ProfileActivity;
 import com.codepath.apps.simpletweets.helper.GlideApp;
 import com.codepath.apps.simpletweets.helper.MyUtils;
@@ -54,10 +55,14 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         holder.tvUserName.setText(usr.getName());
         holder.tvHandle.setText("@" + usr.getScreenName());
         holder.tvTimeGap.setText(MyUtils.getRelativeTimeAgo(tweet.getTimestamp()));
-        GlideApp.with(context).load(usr.getProfileImageUrl()).override(150, 150).fitCenter().apply(RequestOptions.circleCropTransform()).into(holder.ivProfileImage);
+        GlideApp.with(context).load(usr.getProfileImageUrl()).override(200, 200).fitCenter().apply(RequestOptions.circleCropTransform()).into(holder.ivProfileImage);
 
         if(tweet.getMediaUrl()!=null && tweet.getMediaUrl().length()>0){
-            GlideApp.with(context).load(tweet.getMediaUrl()).override(500,500).fitCenter().into(holder.ivMedia);
+            holder.ivMedia.setImageDrawable(null);
+            int len = holder.ivMedia.getLayoutParams().width;
+            GlideApp.with(context).load(tweet.getMediaUrl()).override(len,len).into(holder.ivMedia);
+            holder.ivMedia.setVisibility(View.VISIBLE);
+            Log.d("DEBUG", "bind holder with image:" + tweet.getMediaUrl());
         }else{
             holder.ivMedia.setVisibility(View.GONE);
         }
@@ -115,6 +120,16 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                     Intent i = new Intent(v.getContext(), ProfileActivity.class);
                     String sName = tvHandle.getText().toString().substring(1);
                     i.putExtra("screen_name", sName);
+                    v.getContext().startActivity(i);
+                }
+            });
+            tvReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(v.getContext(), ComposeActivity.class);
+                    String sName = tvHandle.getText().toString().substring(1);
+
+                    i.putExtra("screen_name", "@"+sName);
                     v.getContext().startActivity(i);
                 }
             });

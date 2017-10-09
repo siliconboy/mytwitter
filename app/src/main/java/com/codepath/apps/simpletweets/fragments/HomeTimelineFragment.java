@@ -22,6 +22,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
     private TwitterClient client;
     int mPage;
 
+
     public static HomeTimelineFragment newInstance(int page) {
         HomeTimelineFragment fragment = new HomeTimelineFragment();
         Bundle args = new Bundle();
@@ -35,17 +36,13 @@ public class HomeTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         client = TwitterApp.getRestClient();
 //        mPage = getArguments().getInt(ARG_PAGE);
-        populateTimeline(1L, Long.MAX_VALUE - 1);
+        populateTimeline(1L, 0L);//Long.MAX_VALUE - 1);
     }
 
     @Override
     public void populateTimeline(Long sinceId, Long maxId) {
 
         client.getHomeTimeline(sinceId, maxId, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d("Twitter.client", response.toString());
-            }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -64,21 +61,6 @@ public class HomeTimelineFragment extends TweetsListFragment {
                 throwable.printStackTrace();
             }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Toast.makeText(getContext(), "Could not load more tweet, due to network error.", Toast.LENGTH_LONG).show();
-                Log.d("DEBUG", "swipt disable");
-                swipeContainer.setRefreshing(false);
-                Log.d("Twitter.client", errorResponse.toString());
-                throwable.printStackTrace();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(getContext(), "Could not load more tweet, due to network error.", Toast.LENGTH_LONG).show();
-                Log.d("Twitter.client", responseString);
-                throwable.printStackTrace();
-            }
         });
     }
 

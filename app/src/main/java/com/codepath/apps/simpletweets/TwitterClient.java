@@ -8,8 +8,6 @@ import com.github.scribejava.core.builder.api.BaseApi;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import static com.codepath.apps.simpletweets.models.User_Table.screenName;
-
 /*
  * 
  * This is the object responsible for communicating with a REST API. 
@@ -62,7 +60,7 @@ public class TwitterClient extends OAuthBaseClient {
         // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();
         params.put("count", 20);
-        params.put("since_id", sinceId);
+     //   params.put("since_id", sinceId);
         if (maxId > 0) {
             params.put("max_id", maxId);
         }
@@ -70,11 +68,12 @@ public class TwitterClient extends OAuthBaseClient {
         client.get(apiUrl, params, handler);
     }
 
-    public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler) {
+    public void getUserTimeline(Long maxId, String screenName, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/user_timeline.json");
         // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();
         params.put("count", 20);
+        params.put("max_id",maxId);
         params.put("screen_name", screenName);
 
         client.get(apiUrl, params, handler);

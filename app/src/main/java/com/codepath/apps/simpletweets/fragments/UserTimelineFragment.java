@@ -35,18 +35,14 @@ public class UserTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         client = TwitterApp.getRestClient();
      //   screenName = getArguments().getString("screen_name");
-        populateTimeline(1L,1L);
+        populateTimeline(1L,Long.MAX_VALUE - 1);
     }
 
 
     @Override
     public void populateTimeline(Long sinceId, Long maxId) {
         String screenName = getArguments().getString("screen_name");
-        client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d("Twitter.client", response.toString());
-            }
+        client.getUserTimeline(maxId, screenName, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -65,21 +61,6 @@ public class UserTimelineFragment extends TweetsListFragment {
                 throwable.printStackTrace();
             }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Toast.makeText(getContext(), "Could not load more tweet, due to network error.", Toast.LENGTH_LONG).show();
-                Log.d("DEBUG", "swipt disable");
-                swipeContainer.setRefreshing(false);
-                Log.d("Twitter.client", errorResponse.toString());
-                throwable.printStackTrace();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(getContext(), "Could not load more tweet, due to network error.", Toast.LENGTH_LONG).show();
-                Log.d("Twitter.client", responseString);
-                throwable.printStackTrace();
-            }
         });
     }
 

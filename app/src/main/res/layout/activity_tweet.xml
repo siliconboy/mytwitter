@@ -47,33 +47,41 @@
         android:layout_below="@+id/ivImage"
         android:layout_marginStart="5dp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/ivMedia"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_launcher"
+        android:layout_below="@+id/tvBody"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivMedia"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_below="@+id/tvBody"
-
-        android:id="@+id/linearLayout">
-
-        <ImageButton
-            android:id="@+id/ibReply"
+        android:layout_margin="3dp"
+        >
+        <TextView
+            android:id="@+id/tvReply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_reply" />
-
-        <ImageButton
-            android:id="@+id/ibRepeat"
+            android:drawableLeft="@drawable/ic_reply"
+            android:layout_weight="1"
+            tools:text="reply"/>
+        <TextView
+            android:id="@+id/tvRepeat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_repeat" />
-
-        <ImageButton
-            android:id="@+id/ibStar"
+            android:drawableLeft="@drawable/ic_repeat"
+            android:layout_weight="1"
+            tools:text="retweet"/>
+        <TextView
+            android:id="@+id/tvFavorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_star" />
-
+            android:drawableLeft="@drawable/ic_star"
+            android:layout_weight="1"
+            tools:text="favorite"/>
     </LinearLayout>
 
 

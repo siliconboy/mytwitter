@@ -1,7 +1,6 @@
 package com.codepath.apps.simpletweets.fragments;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.codepath.apps.simpletweets.R;
 import com.codepath.apps.simpletweets.activities.TweetActivity;
@@ -50,7 +48,7 @@ public abstract class TweetsListFragment extends Fragment {
     private EndlessRecyclerViewScrollListener scrollListener;
     private Unbinder unbinder;
 
-
+    boolean isDone =false;
     boolean hasLocal =false;
     String screenName;
 
@@ -72,7 +70,9 @@ public abstract class TweetsListFragment extends Fragment {
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
                 Log.d("DEBUG", "swipe refresh called");
-                populateTimeline(1L,Long.MAX_VALUE - 1);
+                adapter.clear();
+                isDone =false;
+                populateTimeline(1L,0L); //Long.MAX_VALUE - 1);
             }
         });
 
@@ -86,14 +86,14 @@ public abstract class TweetsListFragment extends Fragment {
         adapter = new TweetAdapter(tweets);
         rvTweets.setAdapter(adapter);
 
-        if (NetworkUtils.isNetworkAvailable(getContext()) || NetworkUtils.isOnline()) {
+/*        if (NetworkUtils.isNetworkAvailable(getContext()) || NetworkUtils.isOnline()) {
             Toast.makeText(getActivity(), "offline mode. Loading local data.", Toast.LENGTH_LONG).show();
             //     Snackbar.make(searchLayout, R.string.net_error, Snackbar.LENGTH_LONG).show();
             adapter.addAll(Tweet.recentItems());
             hasLocal = true;
             Log.d("DEBUG", "local load count:" + tweets.size());
         }
-
+*/
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTweets.setLayoutManager(linearLayoutManager);
         // Retain an instance so that you can call `resetState()` for fresh searches
@@ -130,7 +130,7 @@ public abstract class TweetsListFragment extends Fragment {
           if (hasLocal && NetworkUtils.isOnline()) {
               adapter.clear();
               hasLocal=false;
-              populateTimeline(1L, Long.MAX_VALUE - 1);
+              populateTimeline(1L, 0L);//Long.MAX_VALUE - 1);
           }
 
         return v;
@@ -145,7 +145,10 @@ public abstract class TweetsListFragment extends Fragment {
         //  --> Append the new data objects to the existing set of items inside the array of items
         //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
         final int curSize = tweets.size();// adapter.getItemCount();
-
+        if (isDone){
+            Log.d("DEBUG", "Found end already!!!");
+            return;
+        }
         // Create the Handler object (on the main thread by default)
         Handler handler = new Handler();
         // Define the code block to be executed
@@ -156,7 +159,8 @@ public abstract class TweetsListFragment extends Fragment {
                if(hasLocal) {
                    adapter.clear();
                    hasLocal =false;
-                   populateTimeline(1L,Long.MAX_VALUE - 1);
+                   isDone=false;
+                   populateTimeline(1L,0L);//Long.MAX_VALUE - 1);
                 }else {
                    populateTimeline(1L, tweets.get(curSize - 1).getId());
                }
@@ -166,8 +170,14 @@ public abstract class TweetsListFragment extends Fragment {
     }
 
     public void addItems(JSONArray response){
+        if(response.length()<18){  //give 2 redundant range
+            isDone =true;
+            Log.d("DEBUG", "reached end of query!" );
+        }
+        Log.d("DEBUG", "raw items count: " +response.length() );
         tweets.addAll(fromJson(response));
         adapter.notifyItemInserted(tweets.size() - 1);
+        Log.d("DEBUG", "after insertion, total:" + tweets.size() );
     }
 
     public void addItem(JSONObject response){
@@ -185,18 +195,5 @@ public abstract class TweetsListFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
 }

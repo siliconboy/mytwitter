@@ -42,10 +42,6 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     public void populateTimeline(Long sinceId, Long maxId) {
 
         client.getMentionsTimeline(sinceId, maxId, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d("Twitter.client", response.toString());
-            }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -64,21 +60,6 @@ public class MentionsTimelineFragment extends TweetsListFragment {
                 throwable.printStackTrace();
             }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Toast.makeText(getContext(), "Could not load more tweet, due to network error.", Toast.LENGTH_LONG).show();
-                Log.d("DEBUG", "swipt disable");
-                swipeContainer.setRefreshing(false);
-                Log.d("Twitter.client", errorResponse.toString());
-                throwable.printStackTrace();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(getContext(), "Could not load more tweet, due to network error.", Toast.LENGTH_LONG).show();
-                Log.d("Twitter.client", responseString);
-                throwable.printStackTrace();
-            }
         });
     }
 

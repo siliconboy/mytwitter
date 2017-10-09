@@ -66,7 +66,6 @@ public class ProfileActivity extends AppCompatActivity {
         getUser(screenName);
     }
 
-
     public void getUser(String screenName) {
         client.getUser(screenName,new JsonHttpResponseHandler() {
             @Override
@@ -101,31 +100,6 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.d("Twitter.client", responseString);
                 throwable.printStackTrace();
             }
-        });
-    }
-    public void getCredential() {
-        client.getCredential(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    mUser = User.fromJSON(response);
-                    getSupportActionBar().setTitle("@" + mUser.getScreenName());
-                    //populate user header
-                    populateUserHeadline(mUser);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.d("Twitter.client", response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(ProfileActivity.this, "Could not get profile, due to network error.", Toast.LENGTH_LONG).show();
-                //         Log.d("Twitter.client", errorResponse.toString());
-                throwable.printStackTrace();
-            }
-
         });
     }
 
